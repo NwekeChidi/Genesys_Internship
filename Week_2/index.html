@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <title>ToDo List App</title>
+</head>
+<body>
+    <div class="main">
+        <div class="header">
+            <h1>To-Do List</h1>
+            <input type="text" id="taskInput" placeholder="Enter New Task">
+            <span class="addTask" onclick="addTask()">Add Task</span>
+        </div>
+
+        <ul id="tasks">
+            <li class="check">Read 15 pages of Becoming</li>
+            <li>Complete a Task in Learnable '21</li>
+            <li>Pay Electricity Bill</li>
+            <li>Hit the Gym</li>
+            <li>Restock Groceries</li>
+            <li>Spend 30 mins in French Class</li>
+            <li class="check">Visit Michelle and her new baby</li>
+            <li>Kill the Child Node</li>
+        </ul>
+    </div>
+
+    <footer>
+        <script src="functions.js"></script>
+        <span class="aboutButton" onclick="doAbout()">About</span>
+    </footer>
+</body>
+</html>
