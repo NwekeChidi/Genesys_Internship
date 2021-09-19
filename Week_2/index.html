@@ -9,28 +9,31 @@
     <title>ToDo List App</title>
 </head>
 <body>
+    <div class="header-first">
+        <h1>Hello!<h1>
+        <p>
+            Keep Track of Activities for Today.&#x1F64C;<br>
+            <script>document.write(new Date().toDateString());</script>
+        </p> 
+    </div>
     <div class="main">
         <div class="header">
-            <h1>To-Do List</h1>
+            <h2>To-Do List</h2>
             <input type="text" id="taskInput" placeholder="Enter New Task">
             <span class="addTask" onclick="addTask()">Add Task</span>
         </div>
 
         <ul id="tasks">
-            <li class="check">Read 15 pages of Becoming</li>
-            <li>Complete a Task in Learnable '21</li>
+            <li class="check">Complete a Task in Learnable '21</li>
             <li>Pay Electricity Bill</li>
             <li>Hit the Gym</li>
-            <li>Restock Groceries</li>
-            <li>Spend 30 mins in French Class</li>
-            <li class="check">Visit Michelle and her new baby</li>
-            <li>Kill the Child Node</li>
+            <li>Visit Michelle and her new baby</li>
         </ul>
     </div>
 
     <footer>
         <script src="functions.js"></script>
-        <span class="aboutButton" onclick="doAbout()">About</span>
+        <span class="about" onclick="doAbout()">About</span>
     </footer>
 </body>
 </html>
