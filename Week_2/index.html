@@ -5,10 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="fontawesome-free-5.15.4-web/css/all.css">
     <title>ToDo List App</title>
 </head>
-<body>
+<body id="body">
+    <div class="social-icons">
+        <a id="twitter" href="https://twitter.com/iamnwekegabriel" class="fab fa-twitter"></a>
+        <a id="linkedin" href="https://linkedin.com/in/iamnwekechidimma" class="fab fa-linkedin"></a>
+        <a id="github" href="https://github.com/nwekechidi" class="fab fa-github"></a>
+        <a id="mail" href="mailto: realchidinweke@gmail.com" class="fas fa-envelope"></a>
+    </div>
     <div class="header-first">
         <h1>Hello!<h1>
         <p>
@@ -20,7 +26,7 @@
         <div class="header">
             <h2>To-Do List</h2>
             <input type="text" id="taskInput" placeholder="Enter New Task">
-            <span class="addTask" onclick="addTask()">Add Task</span>
+            <span class="addTask" onclick="addTask()">Add</span>
         </div>
 
         <ul id="tasks">
@@ -31,9 +37,13 @@
         </ul>
     </div>
 
-    <footer>
+    <footer class="footer">
         <script src="functions.js"></script>
         <span class="about" onclick="doAbout()">About</span>
+        <p id="power">Powered By:</p>
+        <a id="genesys" href="https://www.genesystechhub.com/">
+            <img id="g-logo" src="static/genesys_logo.jpg" alt="Genesys_Tech_Hub Logo">
+        </a>
     </footer>
 </body>
 </html>

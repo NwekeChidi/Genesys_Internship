@@ -1,14 +1,29 @@
+
+
 body {
     text-align: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 20px;
-    background-image: url('static/WallpaperDog-5486705.jpg');
+    background-image: url('static/WallpaperDog-5486602.jpg');
     background-position: center;
+    background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
     background-color: #888;
     align-content: center;
+    animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
   }
+
+@keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
   
 
   /*Include style for main*/
@@ -21,8 +36,9 @@ body {
       border-radius: 20px;
       padding: 10px;
       margin-top: 5px;
-      margin-left: 200px;
-      margin-right: 200px;
+      width: 24em;
+      margin-left: auto;
+      margin-right: auto;
   }
 
   /* Style the first header*/
@@ -35,8 +51,16 @@ body {
     padding: 30px 40px;
     color: white;
     margin-top: 40px;
-    margin-left: 200px;
-    margin-right: 200px;
+    width: 24em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Style footer */
+  .footer {
+    width: 24em;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   /* Include the padding and border in an element's total width and height */
@@ -57,7 +81,7 @@ body {
     padding: 12px 8px 12px 40px;
     list-style-type: none;
     background: #eee;
-    font-size: 18px;
+    font-size: 75%;
     transition: 0.2s;
     border-radius: 5px;
     margin: 5px;
@@ -164,7 +188,7 @@ body {
     width: 75%;
     padding: 10px;
     float: left;
-    font-size: 16px;
+    font-size: 67%;
   }
   
   /* Style the "Add Task" button */
@@ -175,7 +199,7 @@ body {
     color: rgb(19, 17, 17);
     float: left;
     text-align: center;
-    font-size: 16px;
+    font-size: 67%;
     cursor: pointer;
     transition: 0.3s;
     border-radius: 5px;
@@ -188,10 +212,9 @@ body {
   /* Style the "About" button */
   .about {
     padding: 20px;
-    width: 150px;
     background-image: url("static/WallpaperDog-5486505.jpg");
     background-position: center;
-    font-size: 20px;
+    font-size: 84%;
     font-weight: bold;
     transition: 0.4s;
     cursor: pointer;
@@ -200,14 +223,63 @@ body {
     display: inline-block;
     margin-top: 30px;
     margin-bottom: 30px;
+    width: 6em;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .about:hover {
-    background-color: rgb(155, 137, 137);
+      color: gray;
   }
 
   .about:active {
-      background-color: rgb(63, 42, 42);
-      box-shadow: 0 5px #666;
-      transform: translateY(4px);
+    color: #999;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
   }
+
+  img {
+      border-radius: 20px;
+      height: 120px;
+      width: 120px;
+      margin-left: auto;
+      margin-right: auto;
+  }
+
+  /* Style social media icons*/
+  .social-icons {
+      margin-top: 5px;
+      margin-bottom: 10px;
+  }
+  .social-icons a {
+      width: 30px;
+      margin: 0 10px 0 0;
+      color: black;
+      float: right;
+  }
+  #linkedin:hover {
+      color:rgb(122, 88, 88)
+  }
+  #mail:hover {
+      color:rgb(122, 88, 88)
+  }
+  #twitter:hover {
+      color:rgb(122, 88, 88)
+  }
+  #github:hover {
+      color:rgb(122, 88, 88)
+  }
+
+  #power {
+      font-weight: bold;
+      font-family: monospace;
+      margin-bottom: 10px;
+      margin-left: auto;
+      margin-right: auto;
+      width: auto;
+  }
+
+  #genesys:hover {
+      opacity: 0.5;
+  }
+
