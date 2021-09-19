@@ -116,11 +116,7 @@ taskList.addEventListener('click', function(ev){
 }, false);
 
 
-
+// display about
 function doAbout() {
-  var ddA = document.getElementById("divabout");
-  ddA.innerHTML = "The Author:is \nNweke Chidimma Dominic."
-  if (ddA.InnerHTML != "") {
-    ddA.className = "aboutcolor"
-  }
+    alert("This project was created by Nweke, Chidimma\nDominic, in the processing of completing the week two task in\nthe Genesys Learnable '21 internship program!");    
 }
