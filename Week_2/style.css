@@ -2,12 +2,12 @@ body {
     text-align: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 20px;
-    background-image: url('static/WallpaperDog-5486501.png');
+    background-image: url('static/WallpaperDog-5486705.jpg');
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed;
     background-size: cover;
     background-color: #888;
+    align-content: center;
   }
   
 
@@ -17,11 +17,28 @@ body {
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed;
-      border: 5px solid gray;
+      border: 3px solid gray;
       border-radius: 20px;
       padding: 10px;
-      margin: 60px
+      margin-top: 5px;
+      margin-left: 200px;
+      margin-right: 200px;
   }
+
+  /* Style the first header*/
+  .header-first {
+    background-image: url('static/pexels-mathilde-langevin-8253246.jpg');
+    background-position: center;
+    background-attachment: fixed;
+    border-radius: 20px;
+    border: 3px solid gray;
+    padding: 30px 40px;
+    color: white;
+    margin-top: 40px;
+    margin-left: 200px;
+    margin-right: 200px;
+  }
+
   /* Include the padding and border in an element's total width and height */
   * {
     box-sizing: border-box;
@@ -121,11 +138,15 @@ body {
     text-align: center;
   }
 
-  h1 {
-    margin:5px;
-    color: rgb(31, 29, 29);
+  h2 {
+    color: rgb(63, 42, 42);
     text-shadow: 2px 2px;
+  }
 
+  h1 {
+    font-weight: bold;
+    font-size: x-large;
+    font-family: Georgia, 'Times New Roman', Times, serif;
   }
   
   /* Clear floats after the header */
@@ -146,7 +167,7 @@ body {
     font-size: 16px;
   }
   
-  /* Style the "Add" button */
+  /* Style the "Add Task" button */
   .addTask {
     padding: 10px;
     width: 25%;
@@ -162,4 +183,31 @@ body {
   
   .addTask:hover {
     background-color: rgb(122, 88, 88);
+  }
+
+  /* Style the "About" button */
+  .about {
+    padding: 20px;
+    width: 150px;
+    background-image: url("static/WallpaperDog-5486505.jpg");
+    background-position: center;
+    font-size: 20px;
+    font-weight: bold;
+    transition: 0.4s;
+    cursor: pointer;
+    box-shadow: 0 9px #999;
+    border-radius: 10px;
+    display: inline-block;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  
+  .about:hover {
+    background-color: rgb(155, 137, 137);
+  }
+
+  .about:active {
+      background-color: rgb(63, 42, 42);
+      box-shadow: 0 5px #666;
+      transform: translateY(4px);
   }
