@@ -123,4 +123,4 @@ function getAllCorrs( eventsJournal ){
 var allCorrelations = getAllCorrs(eventsJournal)
 console.log( allCorrelations );
 console.log( allCorrelations.carrot );
-console.log( Object.keys(allCorrelations).length );
+console.log( Object.keys(allCorrelations).length ); // Same with Total events
