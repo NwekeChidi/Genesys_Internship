@@ -191,14 +191,14 @@ const wereEventsObj = {
     "angry on full moon":["angry", " full moon"],
     "hurt on full moon":["got hurt", " full moon"]
 };
-const wereEventsArr = [ "angry", "got hurt", "happy","full moon"];
+const wereEventsArr = [ "angry", "got hurt", "full moon"];
 // loop through wereEvents
 console.log("\n\n");
 let itrt = 0;
 for ( let i in wereEventsObj ){
     let event = wereEventsObj[i];
     console.log("A werewolf is likely to turn when s/he is",Object.keys(wereEventsObj)[itrt]+
-        ". The events that cause this feeling are: "+event);
+        ". The events that cause this feeling are: ["+event+"]\n");
     itrt += 1;
 };
 
@@ -208,31 +208,58 @@ for ( let i in wereEventsObj ){
 function checkIfWereWolf( events, wereEventsArr ){
     // loop through events
     let currWereEvent = [];
-    let num = 0;
     for ( let i=0; i<events.length; i++ ){
-        if (eventPresent(events[i], wereEventsArr)){
-            num =+ 1;
-            currWereEvent[i] = events[i];
+        if (wereEventsArr.includes(events[i])){
+            currWereEvent.push(" "+events[i]);
         }
     }
-    
+    let num = currWereEvent.length;
     if (num >= 2){
-        console.log("These events : "+currWereEvent,
-        "are werewolf events.\nYou are most likely going to turn into a werewolf.");
+        console.log("These events :"+currWereEvent,
+        ",are werewolf events.\nYou are most likely going to turn into a werewolf! Today!!!");
+        }
+    if (num !=0 && num <=1 ){
+        console.log("This event :"+currWereEvent,
+        "is a werewolf event.\nBut you will most likely not turn into a werewolf with this event only.\n");
+        if (currWereEvent.includes(" full moon")){
+          console.log("Hold!\nToday is a full moon! Brace yourself\nThere's most likely a werewolf version of you on the way!!");
+        }
     }
-    if (num !=0 && num <2){
-        console.log("This event "+currWereEvent,
-        "is a werewolf event.\nBut you will most likely not turn into a werewolf.");
-    }
-}
+};
 // get input from user
-const numInp = prompt("Welcome to your Lycanthrope log!\n",
-                        "What is number of events you have to check?: ");
-const userInp = [];
-console.log("\nEnter events individually below\n....")
-for ( let i=0; i<numInp; i++ ){
-    userInp.push(prompt("Enter event:"))
-}
-console.log("\nChecking events with existing log......")
-checkIfWereWolf(userInp, wereEventsArr)
-  
+console.log("\n\n\t\t\t\t-----------------------------");
+console.log("Welcome to your Lycanthrope log!");
+let eList = prompt("For a list of all the events, type 'yes': ").toLowerCase();
+function getList(eList){
+  if (eList == 'yes'){
+    console.log(allEvents);
+  }
+};
+getList(eList);
+var numInp = Number(prompt("What is number of events you have to check?: "));
+var checker = isNaN(numInp);
+while (checker){
+  console.log("Please type in a number");
+  numInp = Number(prompt("What is number of events you have to check?: "));
+  if ( !(isNaN(numInp)) ){
+    break;
+  }
+};
+
+var userInp = [];
+console.log("\nEnter events individually below.","Example:....\nangry\nfull moon\ncycling\n\n");
+var counter = 0;
+while ( counter < numInp ){
+  var event = prompt("Enter event:").toLowerCase();
+  // check if event is in allEvents
+  if ( allEvents.includes(event) ){
+    userInp.push(event);
+    counter += 1;
+  } else {
+    console.log("Please type in a vaiable event!");
+    let eList = prompt("To get a list of the viable events type 'yes': ").toLowerCase();
+    getList(eList);
+  } 
+};
+console.log("\n\nChecking events with existing log......\n");
+checkIfWereWolf(userInp, wereEventsArr);
