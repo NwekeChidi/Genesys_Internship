@@ -40,10 +40,20 @@ for ( let i=0; i<detArr.length; i++ ){
     console.log( detArr[i], " : ", detArr[i+1]  );
     i += 1;
 }
+// console.table( detArr );
 
-//// Calculate the correlation of each event to the werewolf transformation
+
+
+//// Get events that trigger the werewolf transformation
 //////////////////////////////////////////////////////////////////////////
-//Step 1: Create function that creates table data from the events array
+//Step 1: Create function to check if event appear in events
+function eventPresent( event, currEvents ){
+    // return 'true' if event in in currEvents
+        return currEvents.events.indexOf(event) != -1;
+    };
+
+
+//Step 2: Create function that creates table data from the events array
 function createTable( event, eventArr ){
     // create variable for table
     let table = [ 0, 0, 0, 0 ]; // 'let' is used here to create local variables
@@ -53,12 +63,6 @@ function createTable( event, eventArr ){
         let currEvents = eventArr[i];
         // set a variable to track current index of event
         let tracker = 0;
-
-        //create function to check if event appear in events
-        function eventPresent( event, currEvents ){
-        // return 'true' if event in in currEvents
-            return currEvents.events.indexOf(event) != -1;
-        };
 
         // check if event appears in currEvents
         if ( eventPresent( event, currEvents) ){
@@ -77,15 +81,17 @@ function createTable( event, eventArr ){
     return table;
 }
 //// test createTable function (uncomment the lines below to run)
-console.log(  createTable( "beer", eventsJournal ) );
-console.log(  createTable( "meat", eventsJournal ) );
-console.log(  createTable( "full moon", eventsJournal ) );
-console.log(  createTable( "angry", eventsJournal ) );
+// console.log(  createTable( "beer", eventsJournal ) );
+// console.log(  createTable( "meat", eventsJournal ) );
+// console.log(  createTable( "full moon", eventsJournal ) );
+// console.log(  createTable( "angry", eventsJournal ) );
 
-// Step 2: Create a function to calculate the correlation between each event and the main event
+
+
+// Step 3: Create a function to calculate the correlation between each event and the main event
 function calculateCorr( tableArr ){
     /// Using the relation: (d*a - c*b) / sqrt(e*f*g*h)
-    ///for clarity on relation: goto-http//slides.com/dmccraw/eloquent-javascript-chapter-4-part-2/fullscreen#/12
+    ///for clarity on relation: goto-http://slides.com/dmccraw/eloquent-javascript-chapter-4-part-2/fullscreen# /12
     // get variables from table
     let a = tableArr[0], b = tableArr[1];
     let c = tableArr[2], d = tableArr[3];
@@ -95,12 +101,14 @@ function calculateCorr( tableArr ){
     return corr;
 }
 //// test calculateCorr function (uncomment the lines below to run)
-console.log(  calculateCorr( createTable("happy", eventsJournal) ) );
-console.log(  calculateCorr( createTable("meat", eventsJournal) ) );
-console.log(  calculateCorr( createTable("full moon", eventsJournal) ) );
-console.log(  calculateCorr( createTable("angry", eventsJournal) ) );
+// console.log(  calculateCorr( createTable("happy", eventsJournal) ) );
+// console.log(  calculateCorr( createTable("meat", eventsJournal) ) );
+// console.log(  calculateCorr( createTable("full moon", eventsJournal) ) );
+// console.log(  calculateCorr( createTable("angry", eventsJournal) ) );
 
-// Step 3: Map each correlation to a corresponding event
+
+
+// Step 4: Map each correlation to a corresponding event
 // create a function to get and map all correlations to respective events
 function getAllCorrs( eventsJournal ){
     let corrMap = {};
@@ -116,11 +124,66 @@ function getAllCorrs( eventsJournal ){
             }
         }
     }
-    return corrMap
+    return corrMap;
 }
-
+const allCorrelations = getAllCorrs(eventsJournal)
 //// test getAllCorrs function (uncomment the lines below to run)
-var allCorrelations = getAllCorrs(eventsJournal)
-console.log( allCorrelations );
-console.log( allCorrelations.carrot );
-console.log( Object.keys(allCorrelations).length ); // Same with Total events
+// console.table( allCorrelations );
+// console.log( "carrot : ", allCorrelations.carrot );
+// console.log( "Num Events : ", Object.keys(allCorrelations).length ); // Same with Total events
+
+
+
+// Step 5: Get high positive and negative correlations
+// High correlations are those which are more or less than +||- 0.37
+function getHighLowCorrs( allCorrelations ){
+    var highLowCorrs = {};
+    // loop through allCorrelations
+    for ( let i in allCorrelations ){
+        let corr = allCorrelations[i];
+        if (  corr > 0.5 || corr < -0.5 ){
+            highLowCorrs[i] = corr;
+        }
+    }
+    return highLowCorrs;
+}
+// testing getHighLowCorrs function
+console.table( getHighLowCorrs(allCorrelations) );
+
+// from the correlation table printed, let's create new events based on the
+//correlation of the given ones that will likely get the werewolf to turn
+for ( let i=0; i<eventsJournal.length; i++ ){
+    let currEvents = eventsJournal[i];
+    // create new events
+    if ( eventPresent("full moon", currEvents) &&
+        !eventPresent("happy", currEvents) ){
+            currEvents.events.push( "sad on full moon" );
+        };
+    if ( eventPresent("full moon", currEvents) &&
+        eventPresent("angry", currEvents) ){
+            currEvents.events.push( "angry on full moon" );
+        };
+    if ( eventPresent("got hurt", currEvents) &&
+        !eventPresent("happy", currEvents) ){
+            currEvents.events.push( "very sad" );
+        };
+    if ( eventPresent("got hurt", currEvents) &&
+        eventPresent("full moon", currEvents) ){
+            currEvents.events.push( "hurt on full moon" );
+        };
+    if ( eventPresent("angry", currEvents) &&
+        eventPresent("got hurt", currEvents) ){
+            currEvents.events.push( "very upset" );
+        };
+    if ( eventPresent("full moon", currEvents) &&
+        eventPresent("angry", currEvents) && 
+        eventPresent("got hurt", currEvents)){
+            currEvents.events.push( "terrible day" );
+        }
+}
+// checking the correlation of these new events
+var newEvents = ["terrible day", "very upset", "very sad",
+                "sad on full moon", "angry on full moon", "hurt on full moon"];
+for ( let i in newEvents){
+    console.log(newEvents[i], " : ", calculateCorr(createTable(newEvents[i], eventsJournal)));
+}
