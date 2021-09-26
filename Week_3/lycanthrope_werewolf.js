@@ -175,15 +175,64 @@ for ( let i=0; i<eventsJournal.length; i++ ){
         eventPresent("got hurt", currEvents) ){
             currEvents.events.push( "very upset" );
         };
-    if ( eventPresent("full moon", currEvents) &&
-        eventPresent("angry", currEvents) && 
-        eventPresent("got hurt", currEvents)){
-            currEvents.events.push( "terrible day" );
-        }
 }
-// checking the correlation of these new events
-var newEvents = ["terrible day", "very upset", "very sad",
-                "sad on full moon", "angry on full moon", "hurt on full moon"];
+//// checking the correlation of these new events
+var newEvents = ["very upset", "very sad", "sad on full moon",
+                    "angry on full moon", "hurt on full moon"];
 for ( let i in newEvents){
     console.log(newEvents[i], " : ", calculateCorr(createTable(newEvents[i], eventsJournal)));
 }
+// Console out events that are likely to make a werewolf turn
+// create an object of events and feelings
+const wereEventsObj = {
+    "very upset":["angry", " got hurt"],
+    "very sad":["got hurt", " not happy"],
+    "sad on full moon":["full moon", " not happy"],
+    "angry on full moon":["angry", " full moon"],
+    "hurt on full moon":["got hurt", " full moon"]
+};
+const wereEventsArr = [ "angry", "got hurt", "happy","full moon"];
+// loop through wereEvents
+console.log("\n\n");
+let itrt = 0;
+for ( let i in wereEventsObj ){
+    let event = wereEventsObj[i];
+    console.log("A werewolf is likely to turn when s/he is",Object.keys(wereEventsObj)[itrt]+
+        ". The events that cause this feeling are: "+event);
+    itrt += 1;
+};
+
+///////////////////////////////////////////////////////////////////////
+// Create function that accepts an array of events from users and determine if they
+//will turn into wolves with the occurrance of such events
+function checkIfWereWolf( events, wereEventsArr ){
+    // loop through events
+    let currWereEvent = [];
+    let num = 0;
+    for ( let i=0; i<events.length; i++ ){
+        if (eventPresent(events[i], wereEventsArr)){
+            num =+ 1;
+            currWereEvent[i] = events[i];
+        }
+    }
+    
+    if (num >= 2){
+        console.log("These events : "+currWereEvent,
+        "are werewolf events.\nYou are most likely going to turn into a werewolf.");
+    }
+    if (num !=0 && num <2){
+        console.log("This event "+currWereEvent,
+        "is a werewolf event.\nBut you will most likely not turn into a werewolf.");
+    }
+}
+// get input from user
+const numInp = prompt("Welcome to your Lycanthrope log!\n",
+                        "What is number of events you have to check?: ");
+const userInp = [];
+console.log("\nEnter events individually below\n....")
+for ( let i=0; i<numInp; i++ ){
+    userInp.push(prompt("Enter event:"))
+}
+console.log("\nChecking events with existing log......")
+checkIfWereWolf(userInp, wereEventsArr)
+  
