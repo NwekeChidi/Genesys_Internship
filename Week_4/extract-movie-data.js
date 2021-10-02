@@ -7,7 +7,7 @@ const movieData = {"allMovies": []};
 // create movie data
 fs.createReadStream('./IMDB-Movie-Data.csv').pipe(csv()).on('data', function (row) {
   const movie = {
-    id: row.Rank,
+    id: Number(row.Rank),
     title: row.Title,
     genre: row.Genre,
     description: row.Description,
@@ -18,7 +18,8 @@ fs.createReadStream('./IMDB-Movie-Data.csv').pipe(csv()).on('data', function (ro
     rating: row.Rating,
     votes: row.Votes,
     revenue: row.Revenue_Millions,
-    metascore: row.Metascore
+    metascore: row.Metascore,
+    num_in_stock: Math.floor((Math.random() + 1) * 30)
   }
   movieData.allMovies.push(movie);
 }).on('end', function () {
