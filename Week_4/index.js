@@ -54,19 +54,19 @@ const user4 = new User('esy04', allMovieData, users, moviesOnRent);
 
 //
 console.log("\n\nCalling 'removeUser' API funtion which deletes user accounts from user database....");
-owner.removeUser('bola03');
+owner.removeUser(user3);
 console.table(users);
 
 //
 console.log("\n\nCalling 'rentMovie' API funtion which helps a user to rent movies from database.....");
-user1.rentMovie("bloodshot", 3); user1.rentMovie("nine lives", 14);
-user1.rentMovie("free guy", 3); user2.rentMovie("free guy", 14);
-user1.rentMovie("bloodshot", 5); user4.rentMovie("free guy", 14);
-user2.rentMovie("free guy", 5); user2.rentMovie("bloodshot", 5);
-user4.rentMovie("a monster calls", 4);
+let rentArr = ['bloodshot', 3, 'nine lives', 14, 'free guy', 3, 'free guy', 1, 'a monster calls', 3, 'bloodshot', 5];
+for (let i=0; i<rentArr.length; i+=2){
+  user1.rentMovie(rentArr[i], rentArr[i+1]);
+  user2.rentMovie(rentArr[i], rentArr[i+1]);
+  user4.rentMovie(rentArr[i], rentArr[i+1]);}
 console.table(users);
-console.log("\nTry to call 'rentMovie' on a movie not in database......\n");
-user4.rentMovie("nine lives", 4);
+console.log("\nTrying to call 'rentMovie' on a movie not in database......\n");
+user4.rentMovie("Marvel's Eternals", 4);
 
 
 console.log("\n\nCalling 'returnMovie' API funtion which helps a user to return rented movies.....\n\n");
