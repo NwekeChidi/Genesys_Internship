@@ -1,0 +1,150 @@
+{
+  "books":{
+    "personal development": {
+      "48 Laws Of Power": {
+        "title":"48 Laws of Power",
+        "author": "Robert Greene",
+        "contents": "'contents of the book, 48 Laws of Power'",
+        "about": "'about the book, 48 Laws of Power'",
+        "copies": 5
+      },
+      "Eat That Frog":{
+        "title":"Eat That Frog",
+        "author": "Brian Tracy",
+        "contents": "'contents of the book, Eat That Frog'",
+        "about": "'about the book, Eat That Frog'",
+        "copies": 4
+      },
+      "Act Of Seduction":{
+        "title":"Act of Seduction",
+        "author": "Robert Greene",
+        "contents": "'contents of the book, Act of Seduction'",
+        "about": "'about the book, Act of Seduction'",
+        "copies": 5
+      },
+      "Rich Dad Poor Dad":{
+        "title":"Rich Dad Poor Dad",
+        "author": "Robert T. Kiyosaki",
+        "contents": "'contents of the book, Act of Seduction'",
+        "about": "'about the book, Act of Seduction'",
+        "copies": 5
+      },
+      "Start With Why":{
+        "title":"Start With Why",
+        "author": "Simon Sinek",
+        "contents": "'contents of the book, Act of Seduction'",
+        "about": "'about the book, Act of Seduction'",
+        "copies": 5
+      }
+    },
+    "autobiography":{
+      "Becomming":{
+        "title":"Becomming",
+        "author": "Michelle Obama",
+        "contents": "'contents of the book, Becomming'",
+        "about": "'about the book, Becomming'",
+        "copies": 5
+      },
+      "Night":{
+        "title":"Night",
+        "author": "Ellie Wiesel",
+        "contents": "'contents of the book, Night'",
+        "about": "'about the book, Night'",
+        "copies": 2
+      }
+    },
+    "poetry":{
+      "Invictus":{
+        "title":"Invictus",
+        "author": "William Ernest Henley",
+        "contents": "'contents of the poem, Invictus'",
+        "about": "'about the peom, Invictus'",
+        "copies": 5
+      },
+      "Sonnet 116":{
+        "title":"Sonnet 116",
+        "author": "William Shakespere",
+        "contents": "'contents of the poem, Sonnet 116'",
+        "about": "'about the poem, Sonnet 116'",
+        "copies": 7
+      }
+    },
+    "science fiction":{
+      "Dune":{
+        "title":"Dune",
+        "author": "Frank Herbert",
+        "contents": "'contents of the book, Dune'",
+        "about": "'about the book, Dune'",
+        "copies": 3
+      },
+      "Necromancer":{
+        "title":"Necromancer",
+        "author": "William Gibson",
+        "contents": "'contents of the book, Necromancer'",
+        "about": "'about the book, Necromancer'",
+        "copies": 5
+      }
+    },
+    "thriller":{
+      "The Guest List":{
+        "title":"The Guest List",
+        "author": "Lucy Foley",
+        "contents": "'contents of the book, The Guest List'",
+        "about": "'about the book, The Guest List'",
+        "copies": 5
+      },
+      "Verity":{
+        "title":"Verity",
+        "author": "Collen Hoover",
+        "contents": "'contents of the book, Verity'",
+        "about": "'about the book, Verity'",
+        "copies": 5
+      }
+    },
+    "non_fiction":{
+      "Silent Spring":{
+        "title":"Silent Spring",
+        "author": "Rachel Carson",
+        "contents": "'contents of the book, Silent Spring'",
+        "about": "'about the book, Silent Spring'",
+        "copies": 5
+      }
+    },
+    "romance":{
+      "The Duke and I":{
+        "title":"The Duke and I",
+        "author": "Julia Quinn",
+        "contents": "'contents of the book, The Duke and I'",
+        "about": "'about the book, The Duke and I'",
+        "copies": 5
+      }
+    },
+    "physics":{
+      "University Physics":{
+        "title":"University Physics",
+        "author": "Jeff Sanny",
+        "contents": "'contents of the book, University Physics'",
+        "about": "'about the book, University Physics'",
+        "copies": 5
+      }
+    },
+    "chemistry":{
+      "Organic Chemistry As A Second Language":{
+        "title":"Organic Chemistry As A Second Language",
+        "author": "David Klein",
+        "contents": "'contents of the book, Organic Chemistry As a Second Language'",
+        "about": "'about the book, Organic Chemistry As a Second Language'",
+        "copies": 5
+      }
+    },
+    "fantasy":{
+      "The Magicians":{
+        "title":"The Magicians",
+        "author": "Lev Grossman",
+        "contents": "'contents of the book, The Magicians'",
+        "about": "'about the book, The Magicians'",
+        "copies": 5
+      }
+    }
+  }
+}
