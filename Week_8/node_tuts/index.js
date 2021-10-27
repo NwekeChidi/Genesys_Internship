@@ -8,6 +8,7 @@ const http = require('http');
 //const { parse } = require('path/posix');
 const url = require('url');
 const {StringDecoder} = require("string_decoder");
+const routeHandler = require("./lib/routehandler");
 
 const httpServer = http.createServer((req, res)=> {
     //perform other actions
@@ -67,12 +68,3 @@ httpServer.listen(port, ()=> {
     console.log("Server is fired and is listening on port", port)
 });
 
-// route handlers
-const routeHandler = {};
-
-routeHandler.ping = (data, callback) => {
-    callback(200, {respose: "server is live"});
-}
-routeHandler.notfound = (data, callback) => {
-    callback(404, {respose: "Not Found!"});
-}
