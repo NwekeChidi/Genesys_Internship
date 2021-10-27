@@ -13,12 +13,19 @@ const routeHandler = require("./lib/routehandler");
 const httpServer = http.createServer((req, res)=> {
     //perform other actions
     console.log("\nThis is in the server!.....");
+    // parse the incoming url
     const parseUrl = url.parse(req.url, true);
+    // get the path name
     const pathName = parseUrl.pathname;
     const trimmedPath = pathName.replace(/^\/+|\/+$/g, "");
+    // get the HTTP method
     const method = req.method.toLowerCase();
+    // get the query string
     const queryStringObj = parseUrl.query;
+    // get the request headers
     const header = req.headers;
+
+    // initialize decoder
     const decoder = new StringDecoder('utf-8');
 
     var buffer = '';
@@ -70,6 +77,7 @@ httpServer.listen(port, ()=> {
 
 const router = {
     ping : routeHandler.ping,
-    books : routeHandler.books
+    books : routeHandler.books,
+    notfound: routeHandler.notfound
 }
 

@@ -62,11 +62,11 @@ lib.update = (dir, filename, data, callback) => {
                                     if (!err) {
                                     callback(false);
                                     } else {
-                                    callback("error closing the file");
+                                    callback("Error Closing File");
                                     }
                                 });
                                 } else {
-                                callback('error writing to existing file');
+                                callback('Error Writing To File');
                                 }
                             });
                         }
