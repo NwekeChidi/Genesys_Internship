@@ -34,7 +34,7 @@ const httpServer = http.createServer((req, res)=> {
         // compose data
         const data = {
             trimmedPath: trimmedPath,
-            queryString: queryStringObj,
+            query: queryStringObj,
             method: method,
             headers: header,
             payload: loadObj

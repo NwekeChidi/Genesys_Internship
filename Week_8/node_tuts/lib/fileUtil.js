@@ -44,4 +44,53 @@ lib.read = (dir, filename, callback) => {
     });
 }
 
+lib.update = (dir, filename, data, callback) => {
+    const filePath = lib.baseDir+dir+'\\'+filename+'.json';
+    // open file
+    fs.open(filePath, 'r+', (err, fileDescriptor) => {
+        if (!err && fileDescriptor) {
+            fs.readFile(fileDescriptor, 'utf-8', (err, bookToUpdate) => {
+                if (!err && bookToUpdate) {
+                    let updatedBook = helper.formatObject(JSON.parse(bookToUpdate), data);
+                    var updatedData = JSON.stringify(updatedBook);
+                    //truncate file for update
+                    fs.truncate(fileDescriptor, (err) => {
+                        if (!err) {
+                            fs.writeFile(filePath, updatedData, (err) => {
+                                if (!err) {
+                                fs.close(fileDescriptor, (err) => {
+                                    if (!err) {
+                                    callback(false);
+                                    } else {
+                                    callback("error closing the file");
+                                    }
+                                });
+                                } else {
+                                callback('error writing to existing file');
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    callback(err);
+                }
+            });
+        } else {
+            callback("Could Not Update File. File May Not Exist!")
+        }
+    })
+}
+
+// Delete File
+lib.delete = (dir, filename, callback) => {
+    const filePath = lib.baseDir+dir+'\\'+filename+'.json';
+    fs.unlink(filePath, (err) => {
+        if(!err) {
+            callback(false);
+        } else {
+            callback(err);
+        }
+    })
+}
+
 module.exports = lib;
