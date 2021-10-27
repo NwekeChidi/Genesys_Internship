@@ -1,4 +1,7 @@
 // route handlers
+const fileUtil = require('./fileUtil');
+const helper = require('./helper');
+
 const routeHandler = {};
 
 routeHandler.books = (data, callback) => {
@@ -13,9 +16,30 @@ routeHandler.books = (data, callback) => {
 routeHandler._books = {};
 
 // POST route
-routeHandler._books.post = (data, callback) => {};
+routeHandler._books.post = (data, callback) => {
+    const fname = helper.generateRandomString(30);
+    fileUtil.create('books', fname, data.payload, (err)=>{
+        if(!err){
+            callback(200, {message: "Books Added Successfully", data:null});
+        } else {
+            callback(400, {message: "Could Not Add Book"})
+        }
+    })
+};
 // GET route
 routeHandler._books.get = (data, callback) => {
+    if (data.query.name){
+        fileUtil.read('books', data.query.name, (err, data) => {
+            if(!err && data){
+                callback(200, {message: 'Book Retrieved', data:null})
+            } else {
+                callback(400, {err: err, data:data, message:'Could Not Get Book!'})
+            }
+        })
+    } else {
+        callback(404, {message: 'Book Not Found!', data:null})
+    }
+    
     callback(200, {});
 };
 // PUT route
@@ -24,7 +48,7 @@ routeHandler._books.put = (data, callback) => {};
 routeHandler._books.delete = (data, callback) => {};
 
 routeHandler.ping = (data, callback) => {
-    callback(200, {respose: "server is live"});
+    callback(200, {respose: "Server is live"});
 }
 routeHandler.notfound = (data, callback) => {
     callback(404, {respose: "Not Found!"});
