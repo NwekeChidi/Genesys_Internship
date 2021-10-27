@@ -39,7 +39,7 @@ const httpServer = http.createServer((req, res)=> {
             headers: header,
             payload: loadObj
         }
-        const chooseHandler = typeof(routeHandler[trimmedPath]) !== 'undefined' ? routeHandler[trimmedPath] : routeHandler.notfound;
+        const chooseHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : routeHandler.notfound;
         // use the chosen handler to handle the request
         chooseHandler(data, (statusCode, result) => {
             
@@ -67,4 +67,9 @@ let port = 8080;
 httpServer.listen(port, ()=> {
     console.log("Server is fired and is listening on port", port)
 });
+
+const router = {
+    ping : routeHandler.ping,
+    books : routeHandler.books
+}
 
