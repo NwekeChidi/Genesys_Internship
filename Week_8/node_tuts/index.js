@@ -30,19 +30,35 @@ const httpServer = http.createServer((req, res)=> {
         console.log("Decoded result", buffer);
         const loadObj = buffer !== '' ? JSON.parse(buffer) : {};
         
-        
-        res.setHeader("Content-type", "application/json");
-        res.write(JSON.stringify({response: "Request got the server on write.",
-                                   payload: loadObj}));
-        //res.end("Request got to the server on end.");
-        res.end();
-        console.log("The url gotten was:", trimmedPath, "and the method is:", method);
+        // compose data
+        const data = {
+            trimmedPath: trimmedPath,
+            queryString: queryStringObj,
+            method: method,
+            headers: header,
+            payload: loadObj
+        }
+        const chooseHandler = typeof(routeHandler[trimmedPath]) !== 'undefined' ? routeHandler[trimmedPath] : routeHandler.notfound;
+        // use the chosen handler to handle the request
+        chooseHandler(data, (statusCode, result) => {
+            
+            statusCode = typeof(statusCode) === 'number' ? statusCode : 200;
+            result = typeof(res) === 'object' ? result : {};
+
+            const responseObj = JSON.stringify(result);
+            
+            res.setHeader("Content-type", "application/json");
+            res.writeHead(statusCode);
+            
+            res.write(responseObj);
+            //res.end("Request got to the server on end.");
+            res.end();
+            console.log("The url gotten was:", trimmedPath, "and the method is:", method);
+        });
+
     });
-
     //console.log("Header obj:", header);
-    //console.log(req)
-
-    
+    //console.log(req)   
 });
 
 // fire up server
@@ -50,3 +66,13 @@ let port = 8080;
 httpServer.listen(port, ()=> {
     console.log("Server is fired and is listening on port", port)
 });
+
+// route handlers
+const routeHandler = {};
+
+routeHandler.ping = (data, callback) => {
+    callback(200, {respose: "server is live"});
+}
+routeHandler.notfound = (data, callback) => {
+    callback(404, {respose: "Not Found!"});
+}
