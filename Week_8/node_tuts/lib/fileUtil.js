@@ -1,6 +1,7 @@
 // utilites for a file system
 const fs = require("fs");
 const path = require("path");
+const helper = require('./helper');
 
 var lib = {
     baseDir : path.join(__dirname, '/../.data/')
@@ -8,7 +9,7 @@ var lib = {
 
 lib.create = (dir, filename, data, callback) => {
     //open file for writing
-    const filePath = libe.baseDir+dir+'\\'+filename+'.json';
+    const filePath = lib.baseDir+dir+'\\'+filename+'.json';
     fs.open(filePath, 'wx', (err, fileDescriptor) => {
         if(!err && fileDescriptor){
             //convert the data to string
@@ -28,7 +29,7 @@ lib.create = (dir, filename, data, callback) => {
                 }
             })
         } else {
-            callback("Error creating file! File may already exist!")
+            callback({err: err, message: "Error creating file! File may already exist!"})
         }
     })
 }

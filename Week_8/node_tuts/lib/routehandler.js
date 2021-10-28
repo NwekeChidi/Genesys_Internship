@@ -30,7 +30,7 @@ routeHandler._books.post = (data, callback) => {
           if (!err) {
             callback(200, { message: "Book Added Succesfully!", data: null });
           } else {
-            callback(400, { message: "Could Not Add Book" });
+            callback(400, { err: err, message: "Could Not Add Book" });
           }
         });
     } else {

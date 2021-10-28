@@ -46,7 +46,7 @@ const httpServer = http.createServer((req, res)=> {
             headers: header,
             payload: loadObj
         }
-        const chooseHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : routeHandler.notfound;
+        const chooseHandler = typeof(router[trimmedPath]) !== 'undefined' ? router[trimmedPath] : router.notfound;
         // use the chosen handler to handle the request
         chooseHandler(data, (statusCode, result) => {
             
