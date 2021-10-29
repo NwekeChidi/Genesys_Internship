@@ -55,7 +55,7 @@ const httpServer = http.createServer((req, res)=> {
 
             const responseObj = JSON.stringify(result);
             
-            res.setHeader("Content-type", "application/json");
+            res.setHeader('Content-type', "application/json");
             res.writeHead(statusCode);
             
             res.write(responseObj);

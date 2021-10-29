@@ -28,7 +28,7 @@ routeHandler._books.post = (data, callback) => {
         const fileName = helper.generateRandomString(30);
         fileUtil.create('books', fileName, data.payload, (err) => {
           if (!err) {
-            callback(200, { message: "Book Added Succesfully!", data: null });
+            callback(200, { message: "Book Added Succesfully!", data: data.payload });
           } else {
             callback(400, { err: err, message: "Could Not Add Book" });
           }
@@ -42,7 +42,7 @@ routeHandler._books.get = (data, callback) => {
     if (data.query.name){
         fileUtil.read('books', data.query.name, (err, data) => {
             if(!err && data){
-                callback(200, {message: 'Book Retrieved', data:null})
+                callback(200, {message: 'Book Retrieved', data:data})
             } else {
                 callback(400, {err: err, data:data, message:'Could Not Get Book!'})
             }
@@ -50,17 +50,15 @@ routeHandler._books.get = (data, callback) => {
     } else {
         callback(404, {message: 'Book Not Found!', data:null})
     }
-    
-    callback(200, {});
 };
 // PUT route
 routeHandler._books.put = (data, callback) => {
     if(data.query.name){
-        fileUtil.update('books', data.query.name, (err) => {
+        fileUtil.update('books', data.query.name, data.payload, (err) => {
             if(!err){
-                callback(200, {message: 'Book Updated Successfully'})
+                callback(200, {message: 'Book Updated Successfully', data: data.payload})
             } else {
-                callback(400, {err: err, data:data, message:'Could Not Update Book'})
+                callback(400, {err: err, message:'Could Not Update Book', data:null})
             }
         })
     } else {

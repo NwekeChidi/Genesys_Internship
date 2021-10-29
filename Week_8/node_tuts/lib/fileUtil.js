@@ -55,19 +55,19 @@ lib.update = (dir, filename, data, callback) => {
                     let updatedBook = helper.formatObject(JSON.parse(bookToUpdate), data);
                     var updatedData = JSON.stringify(updatedBook);
                     //truncate file for update
-                    fs.truncate(fileDescriptor, (err) => {
+                    fs.ftruncate(fileDescriptor, (err) => {
                         if (!err) {
                             fs.writeFile(filePath, updatedData, (err) => {
                                 if (!err) {
                                 fs.close(fileDescriptor, (err) => {
                                     if (!err) {
-                                    callback(false);
+                                        callback(false);
                                     } else {
-                                    callback("Error Closing File");
+                                        callback("Error Closing File");
                                     }
                                 });
                                 } else {
-                                callback('Error Writing To File');
+                                    callback('Error Writing To File');
                                 }
                             });
                         }
