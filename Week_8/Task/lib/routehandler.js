@@ -26,7 +26,8 @@ routeHandler._books.post = (data, callback) => {
     var genre = typeof (data.payload.genre) === 'string' && data.payload.genre.trim().length > 0 ? data.payload.genre : false;
     
     if (name && price && author && publisher && copies && genre) {
-        const fileName = helper.generateRandomString(name, 10);
+        //const fileName = helper.generateRandomString(name, 10);
+        const fileName = name.split(" ").join("_").toLowerCase();
         fileUtil.create( genre, fileName, data.payload, (err) => {
           if (!err) {
             callback(200, { message: "Book Added Succesfully!", data: data.payload });
@@ -41,7 +42,7 @@ routeHandler._books.post = (data, callback) => {
 // GET route
 routeHandler._books.get = (data, callback) => {
     if (data.query.name){
-        fileUtil.read('books', data.query.name, (err, data) => {
+        fileUtil.read(data.query.genre, data.query.name, (err, data) => {
             if(!err && data){
                 callback(200, {message: 'Book Retrieved', data:data})
             } else {

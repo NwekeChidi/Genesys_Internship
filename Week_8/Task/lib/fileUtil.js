@@ -6,29 +6,22 @@ var lib = {};
 
 lib.create = (genre, filename, data, callback) => {
     //open file for writing
-    const filePath = helper.filePath(genre, filename);
-    fs.open(filePath, 'wx', (err, fileDescriptor) => {
-        if(!err && fileDescriptor){
-            //convert the data to string
-            const strData = JSON.stringify(data);
-            //write to file
-            fs.writeFile(fileDescriptor, strData, (err) => {
-                if(!err){
-                    fs.close(fileDescriptor, (err) => {
-                        if(!err){
-                            callback(false);
-                        } else {
-                            callback("Error closing new file")
-                        }
-                    })
-                } else {
-                    callback("Error writing to new file");
-                }
-            })
-        } else {
-            callback({err: err, message: "Error creating file! File may already exist!"})
-        }
-    })
+    let filePath = helper.filePath(genre, filename);
+    
+    // check if file already e
+    if (fs.existsSync(filePath)){
+        fs.readFile(filePath, 'utf-8', (err, contents) => {
+            if(JSON.stringify(data) === contents){
+                callback("File With Similar Contents Already Exists!")
+            } else {
+                suffix = typeof(data.edition) !== 'undefined' ? data.edition.toLowerCase() : data.publisher.split(" ").join('_').toLowerCase();
+                filePath =  helper.filePath(genre,filename+suffix);
+                helper.createFile(filePath, data, callback)
+            }
+        })
+    } else {
+        helper.createFile(filePath, data, callback)
+    }
 }
 
 lib.read = (genre, filename, callback) => {
@@ -40,6 +33,19 @@ lib.read = (genre, filename, callback) => {
             callback(err, data);
         }
     });
+}
+
+lib.readByGenre = (genre, callback) => {
+    async (err) => {
+        const data = await helper.readFiles(
+            helper.baseDir+genre
+        );
+        if (!err && data){
+            callback(false, JSON.parse(data));
+        } else {
+            callback(err, data);
+        }
+    }
 }
 
 lib.update = (genre, filename, data, callback) => {
