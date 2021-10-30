@@ -1,7 +1,10 @@
-const helper = {};
+const path = require
+const helper = {
+    baseDir : path.join(__dirname, '/../.data/')
+};
 
-helper.generateRandomString = (stringLength) => {
-    stringLength = typeof(stringLength) === 'number' ? stringLength : 20;
+helper.generateRandomString = (name, stringLength) => {
+    stringLength = typeof(stringLength) === 'number' ? stringLength : 10;
     let str = "";
     let validChars = 'abcdefghijklmnopqrstuvwxyz1234567890';
     for (i=0; i<stringLength; i++){
@@ -20,5 +23,7 @@ helper.formatObject = (oldObject = {}, newObject ={}) => {
     })
     return {...oldObject, ...tempObj};
 }
+
+helper
 
 module.exports = helper;

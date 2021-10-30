@@ -22,10 +22,11 @@ routeHandler._books.post = (data, callback) => {
     var price = typeof (data.payload.price) === 'string' && !isNaN(parseInt(data.payload.price)) ? data.payload.price : false;
     var author = typeof (data.payload.author) === 'string' && data.payload.author.trim().length > 0 ? data.payload.author : false;
     var publisher = typeof (data.payload.publisher) === 'string' && data.payload.publisher.trim().length > 0 ? data.payload.publisher : false;
+    var copies = typeof(data.payload.copies) === 'number' && !isNaN(data.payload.copies) > -1 ? data.payload.copies : false;
+    var genre = typeof (data.payload.genre) === 'string' && data.payload.genre.trim().length > 0 ? data.payload.genre : false;
     
-    
-    if (name && price && author && publisher) {
-        const fileName = helper.generateRandomString(30);
+    if (name && price && author && publisher && copies && genre) {
+        const fileName = helper.generateRandomString(name, 10);
         fileUtil.create('books', fileName, data.payload, (err) => {
           if (!err) {
             callback(200, { message: "Book Added Succesfully!", data: data.payload });

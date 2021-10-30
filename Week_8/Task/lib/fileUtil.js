@@ -3,9 +3,7 @@ const fs = require("fs");
 const path = require("path");
 const helper = require('./helper');
 
-var lib = {
-    baseDir : path.join(__dirname, '/../.data/')
-}
+var lib = {};
 
 lib.create = (dir, filename, data, callback) => {
     //open file for writing
