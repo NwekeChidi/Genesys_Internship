@@ -27,7 +27,7 @@ routeHandler._books.post = (data, callback) => {
     
     if (name && price && author && publisher && copies && genre) {
         const fileName = helper.generateRandomString(name, 10);
-        fileUtil.create('books', fileName, data.payload, (err) => {
+        fileUtil.create( genre, fileName, data.payload, (err) => {
           if (!err) {
             callback(200, { message: "Book Added Succesfully!", data: data.payload });
           } else {

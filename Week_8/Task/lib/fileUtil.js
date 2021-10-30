@@ -1,13 +1,12 @@
 // utilites for a file system
 const fs = require("fs");
-const path = require("path");
 const helper = require('./helper');
 
 var lib = {};
 
-lib.create = (dir, filename, data, callback) => {
+lib.create = (genre, filename, data, callback) => {
     //open file for writing
-    const filePath = lib.baseDir+dir+'\\'+filename+'.json';
+    const filePath = helper.filePath(genre, filename);
     fs.open(filePath, 'wx', (err, fileDescriptor) => {
         if(!err && fileDescriptor){
             //convert the data to string
@@ -32,8 +31,8 @@ lib.create = (dir, filename, data, callback) => {
     })
 }
 
-lib.read = (dir, filename, callback) => {
-    const filePath = lib.baseDir+dir+'\\'+filename+'.json';
+lib.read = (genre, filename, callback) => {
+    const filePath = helper.filePath(genre, filename);
     fs.readFile(filePath, 'utf-8', (err, data) => {
         if(!err && data){
             callback(false, JSON.parse(data));
@@ -43,8 +42,8 @@ lib.read = (dir, filename, callback) => {
     });
 }
 
-lib.update = (dir, filename, data, callback) => {
-    const filePath = lib.baseDir+dir+'\\'+filename+'.json';
+lib.update = (genre, filename, data, callback) => {
+    const filePath = helper.filePath(genre, filename);
     // open file
     fs.open(filePath, 'r+', (err, fileDescriptor) => {
         if (!err && fileDescriptor) {
@@ -81,8 +80,8 @@ lib.update = (dir, filename, data, callback) => {
 }
 
 // Delete File
-lib.delete = (dir, filename, callback) => {
-    const filePath = lib.baseDir+dir+'\\'+filename+'.json';
+lib.delete = (genre, filename, callback) => {
+    const filePath = helper.filePath(genre, filename);
     fs.unlink(filePath, (err) => {
         if(!err) {
             callback(false);
