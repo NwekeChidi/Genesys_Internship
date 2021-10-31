@@ -5,7 +5,6 @@ console.log("Hello Node!")
  */
 
 const http = require('http');
-//const { parse } = require('path/posix');
 const url = require('url');
 const {StringDecoder} = require("string_decoder");
 const routeHandler = require("./lib/routehandler");
@@ -78,6 +77,7 @@ httpServer.listen(port, ()=> {
 const router = {
     ping : routeHandler.ping,
     books : routeHandler.books,
+    admin: routeHandler.admin,
     users : routeHandler.users,
     notfound: routeHandler.notfound
 }

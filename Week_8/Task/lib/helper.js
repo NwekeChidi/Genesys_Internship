@@ -1,16 +1,16 @@
 const path = require("path");
 const fs = require("fs");
-const util = require("util");
-//const { books } = require("./routehandler");
 
 const helper = {
     baseUserDir:path.join(__dirname, '/../.data/users/'),
     baseDir : path.join(__dirname, '/../.data/books/')
 };
-const all_genres = JSON.parse(fs.readFileSync(helper.baseDir+"all_genres.json", 'utf-8'));
-const all_users = JSON.parse(fs.readFileSync(helper.baseUserDir+"all_users.json", 'utf-8'));
+helper.all_genres = JSON.parse(fs.readFileSync(helper.baseDir+"all_genres.json", 'utf-8'));
+helper.all_users = JSON.parse(fs.readFileSync(helper.baseUserDir+"all_users.json", 'utf-8'));
+helper.toTitle = (str) => {
+    return str.toLowerCase().split('_').map(function(word) {return (word.charAt(0).toUpperCase() +word.slice(1));}).join(' ');}
 
-helper.generateID = () => {
+    helper.generateID = () => {
     stringLength = 20, str = "", validChars = 'abcdefghijklmnopqrstuvwxyz1234567890';
     for (i=0; i<stringLength; i++){
         let randomChar = validChars.charAt(Math.floor(Math.random()*validChars.length));
@@ -62,7 +62,7 @@ helper.filePath = (dyn, filename) => {
             fs.mkdirSync(helper.baseDir+genre);
         } 
         return helper.baseDir+genre+'\\'+filename+'.json';
-    } else if (dyn && !filename){
+    } else {
         return helper.baseUserDir+dyn+'.json';
     }
 }
@@ -70,9 +70,9 @@ helper.filePath = (dyn, filename) => {
 
 helper.get_key = (value) => {
     let key_book = undefined; key_user = undefined;
-    let all_keys_book = Object.keys(all_genres), all_keys_users = Object.keys(all_users);
-    Object.keys(all_genres).forEach(currKey => {if (all_genres[currKey].includes(value)){key_book = currKey} });
-    Object.keys(all_users).forEach(currKey => {if (all_users[currKey].includes(value)){key_user = currKey} });
+    let all_keys_book = Object.keys(helper.all_genres), all_keys_users = Object.keys(helper.all_users);
+    Object.keys(helper.all_genres).forEach(currKey => {if (helper.all_genres[currKey].includes(value)){key_book = currKey} });
+    Object.keys(helper.all_users).forEach(currKey => {if (helper.all_users[currKey].includes(value)){key_user = currKey} });
     return {
         key_book, key_user,
         all_keys_book, all_keys_users
@@ -81,7 +81,7 @@ helper.get_key = (value) => {
 
 helper.update = (dyn1, dyn2) => {
     genre = dyn1.split(" ").join("_").toLowerCase();
-    if (Object.keys(all_genres).includes(genre)){
+    if (Object.keys(helper.all_genres).includes(genre)){
         const filePath = helper.baseDir+'all_genres.json';
         fs.readFile(filePath, 'utf-8', (err, obj) => {
             if(!err){
@@ -93,7 +93,7 @@ helper.update = (dyn1, dyn2) => {
                 fs.writeFile(filePath, JSON.stringify(data), 'utf-8', err =>{})
             }
         })
-    } else if(!(Object.keys(all_genres).includes(genre))){
+    } else if(!(Object.keys(helper.all_genres).includes(genre))){
         const filePath = helper.baseUserDir+'all_users.json';
         fs.readFile(filePath, 'utf-8', (err, obj) => {
             if(!err){
@@ -136,26 +136,4 @@ helper.updateData = (filePath, bookData, action, callback) => {
         }
     })
 }
-
-
-
-const readDir = util.promisify(fs.readdir);
-const readFile = util.promisify(fs.readFile);
-
-helper.readFiles = async dirName => {
-    const fileNames = await readDir(dirName);
-    console.log({ fileNames });
-    const files_promise = fileNames.map(fileName => {
-        return readFile(dirName + fileName, 'utf-8');
-    });
-    const response = await Promise.all(files_promise);
-    return fileNames.reduce((accumlater, currIdx) => {
-        const content = response[currIdx];
-        accumlater[content.name] = content;
-        return accumlater;
-    }, {});
-};
-
-
-
 module.exports = helper;

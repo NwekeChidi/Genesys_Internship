@@ -43,6 +43,7 @@ lib.createUser = (UserData, callback) => {
 
 lib.read = (genre, filename, callback) => {
     const filePath = helper.filePath(genre, filename);
+    console.log(filename, filePath);
     fs.readFile(filePath, 'utf-8', (err, data) => {
         if(!err && data){
             callback(false, JSON.parse(data));
@@ -68,20 +69,6 @@ lib.bRBook = (genre, userID, filename, action, callback) => {
             } 
         }
     })
-}
-
-lib.readAll = (genre, callback) => {
-    async (err) => {
-        const data = await helper.readFiles(
-            helper.baseDir+genre
-        );
-        if (!err && data){
-            console.log({data})
-            callback(false, JSON.parse(data));
-        } else {
-            callback(err, data);
-        }
-    }
 }
 
 lib.update = (genre, filename, data, callback) => {
@@ -131,6 +118,27 @@ lib.delete = (genre, filename, callback) => {
             callback(err);
         }
     })
+}
+
+// delete User
+lib.deleteUser = (email, callback) => {
+    if (Object.keys(helper.all_users).includes(email)){
+        const filePath = helper.filePath(helper.all_users[email]);
+        fs.unlink(filePath, (err) => {
+            if (!err){
+                fs.readFile(helper.baseUserDir+'all_users.json', 'utf-8', (err, obj) => {
+                    if(!err){
+                        let data = JSON.parse(obj);
+                        delete data[email];
+                        fs.writeFile(helper.baseUserDir+'all_users.json', JSON.stringify(data), 'utf-8', err =>{})
+                        callback(false)
+                    } else {
+                        callback(err);
+                    }
+                })
+            } else {callback(err)}
+        })
+    } else {callback("User Does Not Exist!")}
 }
 
 module.exports = lib;
