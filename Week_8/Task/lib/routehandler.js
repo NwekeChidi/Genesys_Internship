@@ -72,10 +72,8 @@ routeHandler._users.post = (data, callback ) => {
 routeHandler._books.get = (data, callback) => {
     const all_genres = helper.get_key(data.query.name).all_keys_book;
     if (all_genres.includes(data.query.name)){
-        console.log("about to read....")
         if (data.query.name){
             fileUtil.readAll(data.query.name, (err, data) => {
-                console.log("reading complete")
                 if(!err && data){
                     callback(200, {message: 'Books Retrieved', data:data})
                 } else {
@@ -127,6 +125,29 @@ routeHandler._books.put = (data, callback) => {
         callback(404, {message: 'Book Not Found', data:null})
     }
 };
+// users
+routeHandler._users.put = (data, callback) => {
+    let userID = data.query.id; userMail = helper.get_key(userID).key_user;
+    let all_users = helper.get_key(userID).all_keys_users; reqs = data.query.req;
+    let genre = typeof(data.query.genre) !== 'undefined' ? data.query.genre: helper.get_key(data.query.name).key_book;
+    let action = typeof(reqs) === 'string' && ["borrow", "return"].includes(reqs) ? reqs : false;
+
+    if (action){
+        if (all_users.includes(userMail)){
+            fileUtil.bRBook(genre, userID, data.query.name, action, (err) => {
+                if (!err){
+                    callback(200, {message: "Action Carried Out Succesfully!"})
+                } else {
+                    callback(400, {err, err, message: "Could Not Perform Action", data: null})
+                }
+            })
+        } else {
+            callback(400, {message: "Please Register First!"})
+        }
+    } else {
+        callback(404, {message: "No Action Detected", data: null})
+    }
+}
 // DELETE route
 routeHandler._books.delete = (data, callback) => {
 

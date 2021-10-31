@@ -1,19 +1,25 @@
 aa = {"name": "fiver","call":"44"}
-bb = {"name": "fiver","call":"44"}
+bb = {"name": "fiverr","call":"44"}
+ddd = [aa, bb]
+cc = Object.assign({}, aa);
+delete cc.name;
 const helper = require("./helper");
 const fs = require("fs");
 
 console.log(aa);
-if (JSON.stringify(aa) === JSON.stringify(bb)){
-    console.log("Yes1")
-}
-console.log(JSON.stringify(aa) === JSON.stringify(bb))
+idx = ddd.indexOf(bb)
+console.log(ddd.includes(aa))
+console.log(ddd[idx])
+// if (JSON.stringify(aa) === JSON.stringify(bb)){
+//     console.log("Yes1")
+// }
+// console.log(JSON.stringify(aa) === JSON.stringify(bb))
 
 ggg = {}
 ggg.books = {}
 ggg._books = {}
 
-console.log(ggg);
+console.log(cc);
 
 // const all_genres = {};
 var ppp = "";

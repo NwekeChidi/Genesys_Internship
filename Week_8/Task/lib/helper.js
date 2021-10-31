@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const util = require("util");
+//const { books } = require("./routehandler");
 
 const helper = {
     baseUserDir:path.join(__dirname, '/../.data/users/'),
@@ -79,7 +80,6 @@ helper.get_key = (value) => {
 }
 
 helper.update = (dyn1, dyn2) => {
-    console.log("in here....")
     genre = dyn1.split(" ").join("_").toLowerCase();
     if (Object.keys(all_genres).includes(genre)){
         const filePath = helper.baseDir+'all_genres.json';
@@ -105,17 +105,34 @@ helper.update = (dyn1, dyn2) => {
     } 
 }
 
-helper.updateCounters = (action) => {
-    const filePath = helper.filePath(genre, filename);
+helper.updateData = (filePath, bookData, action, callback) => {
     fs.readFile(filePath, 'utf-8', (err, obj) => {
-        let data = JSON.parse(obj)
+        let data = JSON.parse(obj), book = Object.assign({}, bookData);
+        delete book.copies;
         if (!err){
-            if(action === 'pos'){
-                data.copies += 1;
+            if (data.bookCapacity < 1){
+                callback("You Have Reached Your Borrowing Limit!")
             } else {
-                data.copies -= 1;
+                if(action === 'pos'){
+                    data.borrowedBooks.push(book);
+                    data.bookCapacity -= 1;
+                    bookData.copies -= 1;
+                    fs.writeFile(filePath, JSON.stringify(data), 'utf-8', (err) =>{});
+                    callback(false);
+
+                } else if (action === "neg"){
+                    if (!JSON.stringify(data.borrowedBooks).includes(JSON.stringify(book))){
+                        callback("You Did Not Borrow This Book!")
+                    } else {
+                        data.borrowedBooks.splice(data.borrowedBooks.indexOf(book), 1);
+                        data.bookCapacity += 1;
+                        bookData.copies += 1;
+                        fs.writeFile(filePath, JSON.stringify(data), 'utf-8', (err) =>{});
+                        callback(false);
+                    }
+                }
+                
             }
-            fs.writeFile(filePath, JSON.stringify(data), 'utf-8', (err) =>{})
         }
     })
 }

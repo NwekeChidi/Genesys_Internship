@@ -25,17 +25,17 @@ lib.create = (genre, filename, data, callback) => {
     helper.update(filename, genre);
 }
 
-lib.createUser = (data, callback) => {
+lib.createUser = (UserData, callback) => {
     let userID = helper.generateID();
-    let filePath = helper.filePath(userID), email = data.email.toLowerCase();
-    data.userID = userID; data.borrowedBooks = [], data.bookCapacity = 5;
+    let filePath = helper.filePath(userID), email = UserData.email.toLowerCase();
+    UserData.userID = userID; UserData.borrowedBooks = [], UserData.bookCapacity = 5;
     // check if user exist
     fs.readFile(helper.baseUserDir+'all_users.json', 'utf-8', (err, contents) => {
-        data = JSON.parse(contents);
+        let data = JSON.parse(contents);
         if(Object.keys(data).includes(email)){
             callback("User With Email Already Registered!")
         } else {
-            helper.createFile(filePath, data, callback);
+            helper.createFile(filePath, UserData, callback);
         helper.update(email, userID);
         }
     } ) 
@@ -50,6 +50,24 @@ lib.read = (genre, filename, callback) => {
             callback(err, data);
         }
     });
+}
+
+lib.bRBook = (genre, userID, filename, action, callback) => {
+    const filePath_user = helper.filePath(userID);
+    const filePath_book = helper.filePath(genre, filename);
+    fs.readFile(filePath_book, 'utf-8', (err, obj) => {
+        if(!err){
+            let data = JSON.parse(obj);
+            if (data.copies > 0){
+                if (action === "borrow"){
+                    helper.updateData(filePath_user, data, "pos", callback);
+                } else if (action === "return"){
+                    helper.updateData(filePath_user, data, "neg", callback);
+                }
+                fs.writeFile(filePath_book, JSON.stringify(data), 'utf-8', err =>{})
+            } 
+        }
+    })
 }
 
 lib.readAll = (genre, callback) => {
