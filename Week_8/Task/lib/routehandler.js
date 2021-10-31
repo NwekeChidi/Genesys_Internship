@@ -3,19 +3,26 @@ const fileUtil = require('./fileUtil');
 const helper = require('./helper');
 
 const routeHandler = {};
+const acceptableHeaders = ["get", "post", "put", "delete"];
 
 routeHandler.books = (data, callback) => {
-    const acceptableHeaders = ["get", "post", "put", "delete"];
     if(acceptableHeaders.indexOf(data.method)>-1){
         routeHandler._books[data.method](data, callback);
     } else {
         callback(405);
     }
 }
+routeHandler.users = (data, callback) => {
+    if(acceptableHeaders.indexOf(data.method)>-1){
+        routeHandler._users[data.method](data, callback);
+    } else {
+        callback(405);
+    }
+}
 // main book route object
-routeHandler._books = {};
+routeHandler._books = {}, routeHandler._users = {};
 
-// POST route
+//// POST route
 routeHandler._books.post = (data, callback) => {
     //validate that all required fields are filled out
     var name = typeof (data.payload.name) === 'string' && data.payload.name.trim().length > 0 ? data.payload.name : false;
@@ -39,10 +46,49 @@ routeHandler._books.post = (data, callback) => {
         callback(400, { message: "Some Fields Are Incorrect!" });
     }
 };
+//users
+routeHandler._users.post = (data, callback ) => {
+    const emailPattern = /^[a-z\d\S]{3,63}@[a-z\d-]{3,63}.com$/gi;
+    const email = emailPattern.test(data.payload.email) === true ? data.payload.email : false;
+    const firstName = typeof (data.payload.firstName) === 'string' && data.payload.firstName.trim().length > 0 ? data.payload.firstName : false;
+    const lastName = typeof (data.payload.lastName) === 'string' && data.payload.lastName.trim().length > 0 ? data.payload.lastName : false;
+    const address = typeof (data.payload.address) === 'string' && data.payload.address.trim().length > 0 ? data.payload.address : false;
+    
+    if (email && firstName && lastName && address) {
+        fileUtil.createUser( data.payload, (err) => {
+          if (!err) {
+            callback(200, { message: "User Added Succesfully!", data: data.payload });
+          } else {
+            callback(400, { err: err, message: "Could Not Add User" });
+          }
+        });
+    } else {
+        callback(400, { message: "Some Fields Are Incorrect!" });
+    }
+};
+
+
 // GET route
 routeHandler._books.get = (data, callback) => {
-    if (data.query.name){
-        fileUtil.read(data.query.genre, data.query.name, (err, data) => {
+    const all_genres = helper.get_key(data.query.name).all_keys_book;
+    if (all_genres.includes(data.query.name)){
+        console.log("about to read....")
+        if (data.query.name){
+            fileUtil.readAll(data.query.name, (err, data) => {
+                console.log("reading complete")
+                if(!err && data){
+                    callback(200, {message: 'Books Retrieved', data:data})
+                } else {
+                    callback(400, {err: err, data:data, message:'Could Not Get Book!'})
+                }
+            })
+        } else {
+            callback(404, {message: 'Book Not Found!', data:null})
+        }
+    } else if(!all_genres.includes(data.query.name)){
+        let genre = typeof(data.query.genre) !== 'undefined' ? data.query.genre: helper.get_key(data.query.name).key_book;
+
+        fileUtil.read(genre, data.query.name, (err, data) => {
             if(!err && data){
                 callback(200, {message: 'Book Retrieved', data:data})
             } else {
@@ -53,6 +99,20 @@ routeHandler._books.get = (data, callback) => {
         callback(404, {message: 'Book Not Found!', data:null})
     }
 };
+
+// users
+routeHandler._users.get = (data, callback) => {
+    let userID = data.query.id; userMail = helper.get_key(userID).key_user;
+    let all_users = helper.get_key(userID).all_keys_users;
+    if (all_users.includes(userMail)){
+        routeHandler._books.get(data, callback);
+    } else {
+        callback(200, {message: "Please Register First!"})
+    }
+}
+
+
+
 // PUT route
 routeHandler._books.put = (data, callback) => {
     if(data.query.name){

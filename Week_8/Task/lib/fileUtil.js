@@ -7,21 +7,38 @@ var lib = {};
 lib.create = (genre, filename, data, callback) => {
     //open file for writing
     let filePath = helper.filePath(genre, filename);
-    
-    // check if file already e
+    // check if file already exists
     if (fs.existsSync(filePath)){
         fs.readFile(filePath, 'utf-8', (err, contents) => {
             if(JSON.stringify(data) === contents){
                 callback("File With Similar Contents Already Exists!")
             } else {
-                suffix = typeof(data.edition) !== 'undefined' ? data.edition.toLowerCase() : data.publisher.split(" ").join('_').toLowerCase();
-                filePath =  helper.filePath(genre,filename+suffix);
-                helper.createFile(filePath, data, callback)
+                suffix = typeof(data.edition) !== 'undefined' ? data.edition.toLowerCase() : data.publisher.split(" ").pop();
+                filename = filename+"_"+suffix
+                filePath =  helper.filePath(genre,filename);
+                helper.createFile(filePath, data, callback);
             }
         })
     } else {
         helper.createFile(filePath, data, callback)
     }
+    helper.update(filename, genre);
+}
+
+lib.createUser = (data, callback) => {
+    let userID = helper.generateID();
+    let filePath = helper.filePath(userID), email = data.email.toLowerCase();
+    data.userID = userID; data.borrowedBooks = [], data.bookCapacity = 5;
+    // check if user exist
+    fs.readFile(helper.baseUserDir+'all_users.json', 'utf-8', (err, contents) => {
+        data = JSON.parse(contents);
+        if(Object.keys(data).includes(email)){
+            callback("User With Email Already Registered!")
+        } else {
+            helper.createFile(filePath, data, callback);
+        helper.update(email, userID);
+        }
+    } ) 
 }
 
 lib.read = (genre, filename, callback) => {
@@ -35,12 +52,13 @@ lib.read = (genre, filename, callback) => {
     });
 }
 
-lib.readByGenre = (genre, callback) => {
+lib.readAll = (genre, callback) => {
     async (err) => {
         const data = await helper.readFiles(
             helper.baseDir+genre
         );
         if (!err && data){
+            console.log({data})
             callback(false, JSON.parse(data));
         } else {
             callback(err, data);

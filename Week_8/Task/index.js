@@ -35,7 +35,7 @@ const httpServer = http.createServer((req, res)=> {
     req.on('end', () =>{
         buffer += decoder.end();
 
-        console.log("Decoded result", buffer);
+        //console.log("Decoded result", buffer);
         const loadObj = buffer !== '' ? JSON.parse(buffer) : {};
         
         // compose data
@@ -78,6 +78,7 @@ httpServer.listen(port, ()=> {
 const router = {
     ping : routeHandler.ping,
     books : routeHandler.books,
+    users : routeHandler.users,
     notfound: routeHandler.notfound
 }
 
