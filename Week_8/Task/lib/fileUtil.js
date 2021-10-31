@@ -22,7 +22,7 @@ lib.create = (genre, filename, data, callback) => {
     } else {
         helper.createFile(filePath, data, callback)
     }
-    helper.update(filename, genre);
+    helper.update(genre, filename);
 }
 
 lib.createUser = (UserData, callback) => {
@@ -43,7 +43,6 @@ lib.createUser = (UserData, callback) => {
 
 lib.read = (genre, filename, callback) => {
     const filePath = helper.filePath(genre, filename);
-    console.log(filename, filePath);
     fs.readFile(filePath, 'utf-8', (err, data) => {
         if(!err && data){
             callback(false, JSON.parse(data));
@@ -56,19 +55,29 @@ lib.read = (genre, filename, callback) => {
 lib.bRBook = (genre, userID, filename, action, callback) => {
     const filePath_user = helper.filePath(userID);
     const filePath_book = helper.filePath(genre, filename);
-    fs.readFile(filePath_book, 'utf-8', (err, obj) => {
-        if(!err){
-            let data = JSON.parse(obj);
-            if (data.copies > 0){
-                if (action === "borrow"){
-                    helper.updateData(filePath_user, data, "pos", callback);
-                } else if (action === "return"){
-                    helper.updateData(filePath_user, data, "neg", callback);
-                }
-                fs.writeFile(filePath_book, JSON.stringify(data), 'utf-8', err =>{})
-            } 
-        }
-    })
+    fs.readFile(filePath_user, 'utf-8', (error, obj1) => {
+        obj1 = JSON.parse(obj1);
+        fs.readFile(filePath_book, 'utf-8', (err, obj) => {
+            if(!err){
+                let data = JSON.parse(obj);
+                let book = Object.assign({}, data); delete book.copies
+                if (data.copies > 0){
+                    if (action === "borrow"){
+                        helper.updateData(filePath_user, data, "pos", callback);
+                        if (obj1.bookCapacity !== 0){
+                            data.copies -= 1;
+                        }
+                    } else if (action === "return"){
+                        helper.updateData(filePath_user, data, "neg", callback);
+                        if (JSON.stringify(obj1.borrowedBooks).includes(JSON.stringify(book))){
+                            data.copies += 1;
+                        }
+                    }
+                    fs.writeFile(filePath_book, JSON.stringify(data), 'utf-8', err =>{})
+                } 
+            }
+        });
+    });
 }
 
 lib.update = (genre, filename, data, callback) => {

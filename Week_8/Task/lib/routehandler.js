@@ -71,7 +71,7 @@ routeHandler._users.post = (data, callback ) => {
 // GET route
 routeHandler._books.get = (data, callback) => {
 
-    let genre = typeof(data.query.genre) !== 'undefined' ? data.query.genre: helper.get_key(data.query.name).key_book;
+    let genre = typeof(data.query.name) !== 'undefined' ? helper.get_key(data.query.name).key_book : data.query.name;
     if(data.query.name){
         fileUtil.read(genre, data.query.name, (err, data) => {
             if(!err && data){

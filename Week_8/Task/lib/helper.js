@@ -80,20 +80,23 @@ helper.get_key = (value) => {
 }
 
 helper.update = (dyn1, dyn2) => {
-    genre = dyn1.split(" ").join("_").toLowerCase();
-    if (Object.keys(helper.all_genres).includes(genre)){
+    const genre = dyn1.split(" ").join("_").toLowerCase();
+    const emailPattern = /^[a-z\d\S]{3,63}@[a-z\d-]{3,63}.com$/gi;
+    if (!(emailPattern.test(dyn1))){
         const filePath = helper.baseDir+'all_genres.json';
         fs.readFile(filePath, 'utf-8', (err, obj) => {
             if(!err){
                 let data = JSON.parse(obj);
                 if (!(Object.keys(data).includes(genre))){
                     data[genre] = [];
+                    data[genre].push(dyn2);
+                } else {
+                    data[genre] = [dyn2];
                 }
-                data[genre].push(dyn2);
                 fs.writeFile(filePath, JSON.stringify(data), 'utf-8', err =>{})
             }
         })
-    } else if(!(Object.keys(helper.all_genres).includes(genre))){
+    } else if(emailPattern.test(dyn1)){
         const filePath = helper.baseUserDir+'all_users.json';
         fs.readFile(filePath, 'utf-8', (err, obj) => {
             if(!err){
@@ -110,29 +113,25 @@ helper.updateData = (filePath, bookData, action, callback) => {
         let data = JSON.parse(obj), book = Object.assign({}, bookData);
         delete book.copies;
         if (!err){
-            if (data.bookCapacity < 1){
-                callback("You Have Reached Your Borrowing Limit!")
-            } else {
-                if(action === 'pos'){
+            if(action === 'pos'){
+                if (data.bookCapacity === 0){
+                    callback("You Have Reached Your Borrowing Limit!");
+                } else {
                     data.borrowedBooks.push(book);
                     data.bookCapacity -= 1;
-                    bookData.copies -= 1;
                     fs.writeFile(filePath, JSON.stringify(data), 'utf-8', (err) =>{});
                     callback(false);
-
-                } else if (action === "neg"){
-                    if (!JSON.stringify(data.borrowedBooks).includes(JSON.stringify(book))){
-                        callback("You Did Not Borrow This Book!")
-                    } else {
-                        data.borrowedBooks.splice(data.borrowedBooks.indexOf(book), 1);
-                        data.bookCapacity += 1;
-                        bookData.copies += 1;
-                        fs.writeFile(filePath, JSON.stringify(data), 'utf-8', (err) =>{});
-                        callback(false);
-                    }
                 }
-                
-            }
+            } else if (action === "neg"){
+                if (!JSON.stringify(data.borrowedBooks).includes(JSON.stringify(book))){
+                    callback("You Did Not Borrow This Book!")
+                } else {
+                    data.borrowedBooks.splice(data.borrowedBooks.indexOf(book), 1);
+                    data.bookCapacity += 1;
+                    fs.writeFile(filePath, JSON.stringify(data), 'utf-8', (err) =>{});
+                    callback(false);
+                }
+            }  
         }
     })
 }
