@@ -114,7 +114,7 @@ helper.updateData = (filePath, bookData, action, callback) => {
         delete book.copies;
         if (!err){
             if(action === 'pos'){
-                if (data.bookCapacity === 0){
+                if (data.bookCapacity <= 0){
                     callback("You Have Reached Your Borrowing Limit!");
                 } else {
                     data.borrowedBooks.push(book);

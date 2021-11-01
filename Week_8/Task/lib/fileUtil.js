@@ -38,7 +38,7 @@ lib.createUser = (UserData, callback) => {
             helper.createFile(filePath, UserData, callback);
         helper.update(email, userID);
         }
-    } ) 
+    }) 
 }
 
 lib.read = (genre, filename, callback) => {
@@ -61,22 +61,24 @@ lib.bRBook = (genre, userID, filename, action, callback) => {
             if(!err){
                 let data = JSON.parse(obj);
                 let book = Object.assign({}, data); delete book.copies
-                if (data.copies > 0){
-                    if (action === "borrow"){
+                if (action === 'borrow'){
+                    if (data.copies > 0){
                         helper.updateData(filePath_user, data, "pos", callback);
-                        if (obj1.bookCapacity !== 0){
+                        if (obj1.bookCapacity > 0){
                             data.copies -= 1;
                         }
-                    } else if (action === "return"){
-                        helper.updateData(filePath_user, data, "neg", callback);
-                        if (JSON.stringify(obj1.borrowedBooks).includes(JSON.stringify(book))){
-                            data.copies += 1;
-                        }
+                    } else {
+                        callback("Book Is Not Available For Rent!")
                     }
-                    fs.writeFile(filePath_book, JSON.stringify(data), 'utf-8', err =>{})
-                } else {
-                    callback("Book Is Not Available For Rent!")
+                } else if (action === "return"){
+                    helper.updateData(filePath_user, data, "neg", callback);
+                    if (JSON.stringify(obj1.borrowedBooks).includes(JSON.stringify(book))){
+                        data.copies += 1;
+                    }
                 }
+                fs.writeFile(filePath_book, JSON.stringify(data), 'utf-8', err =>{}) 
+            } else {
+                callback(err);
             }
         });
     });
