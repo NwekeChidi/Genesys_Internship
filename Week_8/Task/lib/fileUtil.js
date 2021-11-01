@@ -74,7 +74,9 @@ lib.bRBook = (genre, userID, filename, action, callback) => {
                         }
                     }
                     fs.writeFile(filePath_book, JSON.stringify(data), 'utf-8', err =>{})
-                } 
+                } else {
+                    callback("Book Is Not Available For Rent!")
+                }
             }
         });
     });
