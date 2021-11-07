@@ -76,9 +76,9 @@ httpServer.listen(port, ()=> {
 
 const router = {
     ping : routeHandler.ping,
-    books : routeHandler.books,
-    admin: routeHandler.admin,
-    users : routeHandler.users,
+    library : routeHandler.books,
+    "library/admin" : routeHandler.admin,
+    "library/users" : routeHandler.users,
     notfound: routeHandler.notfound
 }
 
