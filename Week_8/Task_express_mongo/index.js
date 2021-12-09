@@ -62,6 +62,17 @@ app.get("/books/:book_id", async (req, res) => {
     }
 })
 
+// route to update a book
+app.put("/books/:book_id", async (req, res) => {
+    const book_id = req.params.book_id, data = req.body;
+    try {
+        await bookUtil.updateBook(book_id, data);
+        res.status(200).send({ message: "Book Updated Successfully"})
+    } catch {
+        res.status(404).send({ err: error, massage: "Could Not Update Book!"})
+    }
+})
+
 // fire up server
 let port = process.env.PORT || 8080;
 app.listen(port, ()=> {

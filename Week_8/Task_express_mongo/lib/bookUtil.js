@@ -28,6 +28,9 @@ const Schema = mongoose.Schema;
         type : Number,
         required: true
     },
+    edition: {
+        type: String
+    },
     genre : {
         type : String,
         required: true
@@ -52,7 +55,7 @@ const Books = mongoose.model('book', bookSchema);
 // create functions
 // createBook
 exports.createBook = async ( data ) => {
-    return await new Books(data, { unique: true}).save();
+    return await new Books(data).save();
 }
 
 // getAllBooks
