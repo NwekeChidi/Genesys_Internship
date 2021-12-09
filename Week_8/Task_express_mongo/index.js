@@ -99,12 +99,26 @@ app.put("/library/users/borrow/:book_id", async (req, res) => {
     const email = req.body.email, book_id = req.params.book_id;
 
     try {
-        await userUtil.borrowBook(book_id, email);
+        await userUtil.rent(book_id, email, "pos");
         res.status(200).send({ message: "You Have Successfully Borrowed Book!" })
-    } catch (errror) {
+    } catch (error) {
+        console.log(error)
         res.status(400).send({ message: "Could Not Borrow Book!", err: error })
     }
 
+})
+
+// Route to return book
+app.put("/library/users/return/:book_id", async (req, res) => {
+    const email = req.body.email, book_id = req.params.book_id;
+
+    try {
+        await userUtil.rent(book_id, email, "neg");
+        res.status(200).send({ message: "You Have Successfully Returned Borrowed Book!" })
+    } catch (error) {
+        console.log(error)
+        res.status(400).send({ message: "Could Not Return Book", err: error })
+    }
 })
 
 

@@ -55,13 +55,26 @@ const Users = mongoose.model('user', userSchema);
 exports.User = mongoose.model('user', userSchema);
 
 
-// borrowBook
-exports.borrowBook = async ( bookId, userMail ) => {
+// borrow and return book util
+exports.rent = async ( bookId, userMail, action ) => {
     const user = await Users.findOne({ email: userMail }), book = await Book.findOne({ _id: bookId });
 
     if (!book) throw new Error("Book Does Not Exist", 404)
-    user.borrowedBooks.push(bookId);
-    book.copies -= 1;
+
+    if (action === "pos"){
+        if ( book.copies > 0 ){
+            user.borrowedBooks.push(bookId);
+            book.copies -= 1;
+        } else {throw new Error("Book Currently Not Available In Library!", 400)}
+    }
+
+    if ( action === "neg"){
+        if ( user.borrowedBooks.includes(bookId) ){
+            user.borrowedBooks.splice(user.borrowedBooks.indexOf(bookId), 1);
+            book.copies += 1;
+        } else {throw new Error("You Do Not Have This Book In Custody", 400)}
+    }
+    
 
     const updatedUser = await Users.findOneAndUpdate(
         { email: userMail },
