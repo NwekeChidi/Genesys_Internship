@@ -20,6 +20,7 @@ connectToMongoDB();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+
 // add pinging route
 count = 0;
 app.get('/ping', (req, res) => {
@@ -71,6 +72,22 @@ app.put("/books/:book_id", async (req, res) => {
     } catch {
         res.status(404).send({ err: error, massage: "Could Not Update Book!"})
     }
+})
+
+// route to delete a book
+app.delete("/books/:book_id", async (req, res) => {
+    const book_id = req.params.book_id;
+    try {
+        await bookUtil.deleteBook(book_id);
+        res.status(200).send({ message: "Book Deleted Sucessfully" })
+    } catch (error) {
+        res.status(400).send({ err: error, message: "Could Not Delete Book!" })
+    }
+})
+
+
+app.use("**", (req, res) => {
+    res.status(404).send("Route Not Found!")
 })
 
 // fire up server
