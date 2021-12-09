@@ -1,6 +1,6 @@
 // utilities for database
 const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 // create schema for books
  const bookSchema = new Schema({

@@ -10,11 +10,12 @@ const { Schema } = mongoose;
         required : true
     },
     lastName : {
-       type: String,
-       required : true
+        type: String,
+        required : true
    },
    email : {
        type: String,
+       unique: true,
        required : true
    },
    address : {
@@ -22,10 +23,35 @@ const { Schema } = mongoose;
        required : true
    },
    phone : {
-       type: Number,
+       type: String,
        required : true
+   },
+   borrowedBooks: {
+       type: Map,
+       default: {}
    }
+},
+{
+    timestamp: {
+        createdAt: "created_at",
+        updatedAt: "updated_at"
+    }
 })
+
+// userSchema.virtual('fullName').get(() => {
+//     return this.firstName.name
+// })
 
 // create user model
 const Users = mongoose.model('user', userSchema);
+
+// create functions
+// createUser
+exports.createUser = async ( data ) => {
+    return await new Users(data).save();
+}
+
+// borrowBook
+exports.borrowBook = async ( bookId, userId  ) => {
+    
+}

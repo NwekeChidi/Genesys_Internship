@@ -3,7 +3,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bookUtil = require('./lib/bookUtil');
-const helper = require('./lib/helper');
+const userUtil = require('./lib/userUtil');
 
 
 // initialize express
@@ -29,8 +29,9 @@ app.get('/ping', (req, res) => {
 })
 
 
+///// Admin Route
 // add createBook route
-app.post("/books", async (req, res) => {
+app.post("/library/books", async (req, res) => {
     const data = req.body;
 
     try {
@@ -43,7 +44,7 @@ app.post("/books", async (req, res) => {
 })
 
 // add route to get all books
-app.get("/books", async (req, res) => {
+app.get("/library/books", async (req, res) => {
     try {
         const data = await bookUtil.getAllBooks();
         res.status(200).send({ message: "Books Retrieved!", data: data });
@@ -53,7 +54,7 @@ app.get("/books", async (req, res) => {
 })
 
 // route to get a single book
-app.get("/books/:book_id", async (req, res) => {
+app.get("/library/books/:book_id", async (req, res) => {
     const book_id = req.params.book_id;
     try {
         const data = await bookUtil.getOneBook(book_id);
@@ -64,7 +65,7 @@ app.get("/books/:book_id", async (req, res) => {
 })
 
 // route to update a book
-app.put("/books/:book_id", async (req, res) => {
+app.put("/library/books/:book_id", async (req, res) => {
     const book_id = req.params.book_id, data = req.body;
     try {
         await bookUtil.updateBook(book_id, data);
@@ -75,7 +76,7 @@ app.put("/books/:book_id", async (req, res) => {
 })
 
 // route to delete a book
-app.delete("/books/:book_id", async (req, res) => {
+app.delete("/library/books/:book_id", async (req, res) => {
     const book_id = req.params.book_id;
     try {
         await bookUtil.deleteBook(book_id);
@@ -86,6 +87,21 @@ app.delete("/books/:book_id", async (req, res) => {
 })
 
 
+// Route to create new user
+app.post("/library/users/register", async (req, res) => {
+    const userData = req.body;
+    console.log(userData)
+
+    try {
+        await userUtil.createUser(userData);
+        res.status(200).send({ message : "Registration Successful!" })
+    } catch (error) {
+        if (error.keyPattern) res.status(400).send({ err: error, message: "Email Already Registered!" })
+        else res.status(404).send({ err: error, message: "Could Not Register User" })
+    }
+})
+
+// Ro
 app.use("**", (req, res) => {
     res.status(404).send("Route Not Found!")
 })
