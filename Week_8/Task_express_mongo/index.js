@@ -41,6 +41,27 @@ app.post("/books", async (req, res) => {
     }
 })
 
+// add route to get all books
+app.get("/books", async (req, res) => {
+    try {
+        const data = await bookUtil.getAllBooks();
+        res.status(200).send({ message: "Books Retrieved!", data: data });
+    } catch (error) {
+        res.status(404).send({ err: error, message: "Could Not Retrieve Books" })
+    }
+})
+
+// route to get a single book
+app.get("/books/:book_id", async (req, res) => {
+    const book_id = req.params.book_id;
+    try {
+        const data = await bookUtil.getOneBook(book_id);
+        res.status(200).send({ message: "Book Retrieved", data: data })
+    } catch (error) {
+        res.status(404).send({ err: error, message: "Could Not Retrieve Book" })
+    }
+})
+
 // fire up server
 let port = process.env.PORT || 8080;
 app.listen(port, ()=> {
