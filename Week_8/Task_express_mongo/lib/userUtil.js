@@ -13,10 +13,17 @@ const { Schema } = mongoose;
         type: String,
         required : true
    },
+   fullName: {
+       type: String
+   },
    email : {
        type: String,
        unique: true,
        required : true
+   },
+   password : {
+       type: String,
+       required: true
    },
    address : {
        type: String,
@@ -43,15 +50,16 @@ const { Schema } = mongoose;
 // })
 
 // create user model
-const Users = mongoose.model('user', userSchema);
+//const Users = mongoose.model('user', userSchema);
+exports.User = mongoose.model('user', userSchema);
 
 // create functions
 // createUser
-exports.createUser = async ( data ) => {
-    return await new Users(data).save();
-}
+// exports.createUser = async ( data ) => {
+//     return await new Users(data).save();
+// }
 
 // borrowBook
-exports.borrowBook = async ( bookId, userId  ) => {
+// exports.borrowBook = async ( bookId, userId  ) => {
     
-}
+// }

@@ -4,19 +4,28 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bookUtil = require('./lib/bookUtil');
 const userUtil = require('./lib/userUtil');
+const auth = require("./controllers/auth");
+const morgan = require("morgan");
+require('dotenv').config();
 
 
 // initialize express
 const app = express();
 
 // connect to MongoDB
-const connectToMongoDB = async () => {
-    await mongoose.connect('mongodb://localhost:27017/book-store');
-    console.log(":: Connected to MongoDB Server.")
-}
-connectToMongoDB();
+// const MONGODB_URI = process.env.MONGODB_URI;
+// const connectToMongoDB = async () => {
+//     try {
+//         await mongoose.connect(MONGODB_URI);
+//         console.log(":::> Connected to MongoDB Server.")
+//     } catch (error) {
+//         console.log("<::: Could Not Connect To MongoDB Server", error)
+//     }
+// }
+// connectToMongoDB();
 
-// middleware for express
+// middleware for app
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -97,17 +106,33 @@ app.post("/library/users/register", async (req, res) => {
         res.status(200).send({ message : "Registration Successful!" })
     } catch (error) {
         if (error.keyPattern) res.status(400).send({ err: error, message: "Email Already Registered!" })
-        else res.status(404).send({ err: error, message: "Could Not Register User" })
+        else res.status(400).send({ err: error, message: "Could Not Register User" })
     }
 })
 
-// Ro
+// Route to sign up
+app.post("/library/users/signup", auth.signup);
+
+// Route to sign in
+app.post("/library/users/signin", auth.signin);
+
+
+
+// Route 404 
 app.use("**", (req, res) => {
     res.status(404).send("Route Not Found!")
 })
 
 // fire up server
-let port = process.env.PORT || 8080;
-app.listen(port, ()=> {
-    console.log("Server is fired and is listening on port", port)
+const port = process.env.PORT //|| 8080;
+const MONGODB_URI = process.env.MONGODB_URI //|| "mongodb://localhost:27017/book-store"
+app.listen(port, async ()=> {
+
+    console.log("Server is Fired and is Listening on Port", port);
+    try {
+        await mongoose.connect(MONGODB_URI);
+        console.log(":::> Connected to MongoDB Server.")
+    } catch (error) {
+        console.log("<::: Could Not Connect To MongoDB Server", error)
+    }
 });
