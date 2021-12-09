@@ -48,9 +48,9 @@ const { Schema } = mongoose;
  })
 
 
-// create a book model
+// create a book mo
 const Books = mongoose.model('book', bookSchema);
-
+exports.Book = mongoose.model('book', bookSchema);
 
 // create functions
 // createBook
@@ -61,14 +61,6 @@ exports.createBook = async ( data ) => {
 // getAllBooks
 exports.getAllBooks = async () => {
     return await Books.find({});
-}
-
-// getBooksByGenre
-exports.getBookByGenre = async ( genre ) => {
-    const books = await Books.findOne(genre);
-    if(!books) throw new Error("Genre incorrect or does not exist");
-
-    return books;
 }
 
 

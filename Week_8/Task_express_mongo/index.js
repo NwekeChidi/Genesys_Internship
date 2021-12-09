@@ -5,24 +5,13 @@ const mongoose = require('mongoose');
 const bookUtil = require('./lib/bookUtil');
 const userUtil = require('./lib/userUtil');
 const auth = require("./controllers/auth");
+const profile = require("./controllers/profile");
 const morgan = require("morgan");
 require('dotenv').config();
 
 
 // initialize express
 const app = express();
-
-// connect to MongoDB
-// const MONGODB_URI = process.env.MONGODB_URI;
-// const connectToMongoDB = async () => {
-//     try {
-//         await mongoose.connect(MONGODB_URI);
-//         console.log(":::> Connected to MongoDB Server.")
-//     } catch (error) {
-//         console.log("<::: Could Not Connect To MongoDB Server", error)
-//     }
-// }
-// connectToMongoDB();
 
 // middleware for app
 app.use(morgan('dev'));
@@ -95,26 +84,28 @@ app.delete("/library/books/:book_id", async (req, res) => {
     }
 })
 
-
-// Route to create new user
-app.post("/library/users/register", async (req, res) => {
-    const userData = req.body;
-    console.log(userData)
-
-    try {
-        await userUtil.createUser(userData);
-        res.status(200).send({ message : "Registration Successful!" })
-    } catch (error) {
-        if (error.keyPattern) res.status(400).send({ err: error, message: "Email Already Registered!" })
-        else res.status(400).send({ err: error, message: "Could Not Register User" })
-    }
-})
-
 // Route to sign up
 app.post("/library/users/signup", auth.signup);
 
 // Route to sign in
 app.post("/library/users/signin", auth.signin);
+
+// Route to view profile
+// app.post("/library/users/view_profile", profile.view);
+
+
+// Route to borrow book
+app.put("/library/users/borrow/:book_id", async (req, res) => {
+    const email = req.body.email, book_id = req.params.book_id;
+
+    try {
+        await userUtil.borrowBook(book_id, email);
+        res.status(200).send({ message: "You Have Successfully Borrowed Book!" })
+    } catch (errror) {
+        res.status(400).send({ message: "Could Not Borrow Book!", err: error })
+    }
+
+})
 
 
 

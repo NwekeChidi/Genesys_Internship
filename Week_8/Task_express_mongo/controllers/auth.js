@@ -54,7 +54,7 @@ auth.signin = async (req, res) => {
         const token = jwt.sign({ user_id: user._id }, JWT_SECRET_KEY, { expiresIn : 60 * 10 });
 
         res.status(200).send({
-            message: `Hello ${user.fullName}!\nWelcome To TeqyVerse Library!`
+            message: `Hello ${user.fullName}! Welcome To TeqyVerse Library!`
         })
 
     } catch (error) {

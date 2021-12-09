@@ -1,6 +1,7 @@
 // utilities for database
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const Book = require('./bookUtil').Book;
 
 
  // create schema for users
@@ -34,8 +35,8 @@ const { Schema } = mongoose;
        required : true
    },
    borrowedBooks: {
-       type: Map,
-       default: {}
+       type: Array,
+       default: []
    }
 },
 {
@@ -50,16 +51,28 @@ const { Schema } = mongoose;
 // })
 
 // create user model
-//const Users = mongoose.model('user', userSchema);
+const Users = mongoose.model('user', userSchema);
 exports.User = mongoose.model('user', userSchema);
 
-// create functions
-// createUser
-// exports.createUser = async ( data ) => {
-//     return await new Users(data).save();
-// }
 
 // borrowBook
-// exports.borrowBook = async ( bookId, userId  ) => {
-    
-// }
+exports.borrowBook = async ( bookId, userMail ) => {
+    const user = await Users.findOne({ email: userMail }), book = await Book.findOne({ _id: bookId });
+
+    if (!book) throw new Error("Book Does Not Exist", 404)
+    user.borrowedBooks.push(bookId);
+    book.copies -= 1;
+
+    const updatedUser = await Users.findOneAndUpdate(
+        { email: userMail },
+        { $set: user }
+    ), updatedBook = await Book.findByIdAndUpdate(
+        { _id: bookId },
+        { $set: book }
+    );
+
+    if (!updatedBook || !updatedUser ) throw new Error("Could Not Update Book", 400);
+    return {
+        updatedBook, updatedUser
+    }
+}
